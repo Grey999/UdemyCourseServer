@@ -1,7 +1,6 @@
 import socket
 import json
 
-
 class Server:
     global s
     global ip
